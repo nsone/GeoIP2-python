@@ -58,6 +58,16 @@ class BaseTestReader(object):
             reader.city('10.10.10.10')
         reader.close()
 
+    def test_netmask(self):
+        reader = geoip2.database.Reader(
+            'data/test-data/GeoIP2-Country-Test.mmdb')
+        record = reader.country('81.2.69.160')
+        self.assertTrue(reader.metadata().ip_version == 6)
+        self.assertEqual(record.traits.ip_address, '81.2.69.160')
+        self.assertEqual(record.traits.netmask, 123)
+        self.assertEqual(record.traits.netmask - 96, 27)
+        reader.close()
+
     def test_wrong_database(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')

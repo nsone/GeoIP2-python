@@ -82,6 +82,7 @@ class TestModels(unittest.TestCase):
                 'network_speed': 'cable/DSL',
                 'organization': 'Blorg',
                 'user_type': 'college',
+                'netmask': 123,
             },
         }
 
@@ -204,6 +205,7 @@ class TestModels(unittest.TestCase):
             'traits': {
                 'ip_address': '1.2.3.4',
                 'is_satellite_provider': True,
+                'netmask': 123
             },
         }
         model = geoip2.models.City(raw)
@@ -256,6 +258,8 @@ class TestModels(unittest.TestCase):
                          'traits is_anonymous_proxy returns False by default')
         self.assertEqual(model.traits.is_satellite_provider, True,
                          'traits is_setellite_provider is True')
+        self.assertEqual(model.traits.netmask, 123,
+                         'traits netmask is 123')
         self.assertEqual(model.raw, raw, 'raw method produces raw output')
 
         self.assertRegex(
