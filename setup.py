@@ -21,7 +21,8 @@ requirements = [i.strip() for i in open("requirements.txt").readlines()]
 
 setup(
     name='geoip2',
-    version=geoip2.__version__,
+    # Temporary version change until this patch lands: version=geoip2.__version__
+    version='2.2.0.ns1-1',
     description='MaxMind GeoIP2 API',
     long_description=codecs.open('README.rst', 'r', 'utf-8').read(),
     author='Gregory Oschwald',
