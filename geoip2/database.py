@@ -154,25 +154,31 @@ class Reader(object):
                                     ip_address)
 
     def _get(self, database_type, ip_address):
+        record, _ = self._get_with_netmask(database_type, ip_address)
+        return record
+
+    def _get_with_netmask(self, database_type, ip_address):
         if database_type not in self.metadata().database_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
                             "%s database" %
                             (caller, self.metadata().database_type))
-        record = self._db_reader.get(ip_address)
+        record, netmask = self._db_reader.get_with_netmask(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
-        return record
+        return record, netmask
 
     def _model_for(self, model_class, types, ip_address):
-        record = self._get(types, ip_address)
+        record, netmask = self._get_with_netmask(types, ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
+        record.setdefault('traits', {})['netmask'] = netmask
         return model_class(record, locales=self._locales)
 
     def _flat_model_for(self, model_class, types, ip_address):
-        record = self._get(types, ip_address)
+        record, netmask = self._get_with_netmask(types, ip_address)
         record['ip_address'] = ip_address
+        record['netmask'] = netmask
         return model_class(record)
 
     def metadata(self):
