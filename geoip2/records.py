@@ -514,6 +514,18 @@ class Traits(Record):
 
       :type: unicode
 
+    .. attribute:: netmask
+
+      The netmask associated with the IP address.  For an IPv6 database, this value
+      will always be in the IPv6 address space even for IPv4 addresses.  In the case
+      of an IPv4 address in an IPv6 database, if you want the IPv4 netmask then
+      subtract 96 from this value.  (See
+      `IPv4-mapped IPv6 addresses
+      <https://en.wikipedia.org/wiki/IPv6#IPv4-mapped_IPv6_addresses>`_ for more
+      details.)
+
+      :type: int
+
     .. attribute:: organization
 
       The name of the organization associated with the IP address. This
@@ -551,7 +563,7 @@ class Traits(Record):
     _valid_attributes = set(
         ['autonomous_system_number', 'autonomous_system_organization',
          'domain', 'is_anonymous_proxy', 'is_satellite_provider', 'isp',
-         'ip_address', 'organization', 'user_type'])
+         'ip_address', 'netmask', 'organization', 'user_type'])
 
     def __init__(self, **kwargs):
         for k in ['is_anonymous_proxy', 'is_satellite_provider']:
